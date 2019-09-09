@@ -1,7 +1,6 @@
 import org.sqlite.SQLiteConfig;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
+import java.sql.*;
 
 public class Main {
     public static Connection db = null;
@@ -28,8 +27,21 @@ public class Main {
         }
     }
 
-    public static void main(String[] args){
+    public static void main(String[] args) throws SQLException {
         openDatabase("Project Database.db");
+        PreparedStatement ps = db.prepareStatement("SELECT UserID, Username, FirstName, Surname, Score FROM Users");
+        ResultSet results = ps.executeQuery();
+        while(results.next()){
+            int UserID = results.getInt(1);
+            String Username = results.getString(2);
+            String Password = results.getString(3);
+            String FirstName = results.getString(4);
+            String Surname = results.getString(5);
+            String Score = results.getString(6);
+            System.out.println(UserID + " " + Username + " " + FirstName + " " + Surname + " " + Score);
+
+        }
+
 
         // code using database goes here.
 
