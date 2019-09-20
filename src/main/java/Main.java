@@ -28,7 +28,7 @@ public class Main {
             System.out.println("Database disconnection error:" + exception.getMessage());
         }
     }
-
+    // Main method
     public static void main(String[] args) throws SQLException {
         openDatabase("Project Database.db");
         PreparedStatement ps = db.prepareStatement("SELECT UserID, Username, Password, FirstName, Surname, FROM UserDetails");
@@ -111,5 +111,12 @@ public class Main {
             System.out.println(exception.getMessage());
         }
     }
+
+
+
+
+
+
+
 }
 // oh god o _ o
