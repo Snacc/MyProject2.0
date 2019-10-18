@@ -1,3 +1,6 @@
+package Controllers;
+import Server.Main;
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
@@ -5,7 +8,7 @@ public class LeaderboardController {
 
     public static void ListScoreboard(){
         try{
-            PreparedStatement ps = db.prepareStatement("SELECT LeaderboardID, Username, Score");
+            PreparedStatement ps = Main.db.prepareStatement("SELECT LeaderboardID, Username, Score FROM Leaderboard");
             ResultSet results = ps.executeQuery();
             while(results.next()){    //Method keeps getting data until it reaches the end of the database.
                 int LeaderboardID = results.getInt(1);
@@ -22,7 +25,7 @@ public class LeaderboardController {
     public static void InsertIntoLeaderboard(int LeaderboardID, String Username, int Score){
 
         try{
-            PreparedStatement ps = db.prepareStatement("INSERT INTO Leaderboard(LeaderboardID, Username, Score) VALUES (?,?,?)");
+            PreparedStatement ps = Main.db.prepareStatement("INSERT INTO Leaderboard(LeaderboardID, Username, Score) VALUES (?,?,?)");
             ps.setInt(1, LeaderboardID);
             ps.setString(2, Username);
             ps.setInt(3, Score);
@@ -37,9 +40,9 @@ public class LeaderboardController {
 
     }
 
-    public static void UpdateLeaderboard (String Username, int Score){
+    public static void UpdateLeaderboard(String Username, int Score){
         try{
-            PreparedStatement ps = db.prepareStatement("UPDATE Leaderboard SET Username = ?, Score = ? WHERE LeaderboardID = ?");
+            PreparedStatement ps = Main.db.prepareStatement("UPDATE Leaderboard SET Username = ?, Score = ? WHERE LeaderboardID = ?");
             ps.setString(1,Username);
             ps.setInt(2,Score);
             ps.executeUpdate();
@@ -52,7 +55,7 @@ public class LeaderboardController {
 
     public static void DeleteLeaderboard(int LeaderboardID){
         try{
-            PreparedStatement ps = db.prepareStatement("DELETE FROM Leaderboard WHERE LeaderboardID = ?");
+            PreparedStatement ps = Main.db.prepareStatement("DELETE FROM Leaderboard WHERE LeaderboardID = ?");
             ps.setInt(1,LeaderboardID);
             ps.executeUpdate();
 

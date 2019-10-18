@@ -1,10 +1,13 @@
+package Controllers;
+import Server.Main;
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
-public class CSController {
-    public static void ListCS(){
+public class PhysicsController {
+    public static void ListPhysics(){
         try{
-            PreparedStatement ps = db.prepareStatement("SELECT QuestionID, Subtopic, Question, Answer A, Answer B, Answer C, Answer D FROM CS");
+            PreparedStatement ps = Main.db.prepareStatement("SELECT QuestionID, Subtopic, Question, AnswerA, AnswerB, AnswerC, AnswerD FROM Physics");
             ResultSet results = ps.executeQuery();
             while(results.next()){    //Method keeps getting data until it reaches the end of the database.
                 int QuestionID = results.getInt(1);
@@ -22,9 +25,9 @@ public class CSController {
         }
     }
 
-    public static void InsertIntoCS(int QuestionID, String Question, String Subtopic, String AnswerA, String AnswerB, String AnswerC, String AnswerD){
+    public static void InsertIntoPhysics(int QuestionID, String Question, String Subtopic, String AnswerA, String AnswerB, String AnswerC, String AnswerD){
         try{
-            PreparedStatement ps = db.prepareStatement("INSERT INTO CS(QuestionID, Subtopic, Question, Answer A, Answer B, Answer C, AnswerD) VALUES (?,?,?,?,?,?)");
+            PreparedStatement ps = Main.db.prepareStatement("INSERT INTO Physics(QuestionID, Subtopic, Question, AnswerA, AnswerB, AnswerC, AnswerD) VALUES (?,?,?,?,?,?,?)");
             ps.setInt(1, QuestionID);
             ps.setString(2, Subtopic);
             ps.setString(3, Question);
@@ -33,7 +36,7 @@ public class CSController {
             ps.setString(6, AnswerC);
             ps.setString(7,AnswerD);
             ps.executeUpdate();
-            System.out.println("Record added to Computer Science Table");
+            System.out.println("Record added to Physics Table");
 
         }catch (Exception exception){
             System.out.println(exception.getMessage());
@@ -41,9 +44,9 @@ public class CSController {
         }
     }
 
-    public static void UpdateCS (String Subtopic, String Question, String AnswerA, String AnswerB, String AnswerC, String AnswerD){
+    public static void UpdatePhysics(String Subtopic, String Question, String AnswerA, String AnswerB, String AnswerC, String AnswerD){
         try{
-            PreparedStatement ps = db.prepareStatement("UPDATE CS SET Subtopic = ?, Question = ?, AnswerA = ?, AnswerB = ?, AnswerC = ?, AnswerD = ? WHERE UserID = ?");
+            PreparedStatement ps = Main.db.prepareStatement("UPDATE Physics SET Subtopic = ?, Question = ?, AnswerA = ?, AnswerB = ?, AnswerC = ?, AnswerD = ? WHERE UserID = ?");
             ps.setString(1,Subtopic);
             ps.setString(2,Question);
             ps.setString(3,AnswerA);
@@ -58,9 +61,9 @@ public class CSController {
         }
     }
 
-    public static void DeleteCS(int QuestionID){
+    public static void DeletePhysics(int QuestionID){
         try{
-            PreparedStatement ps = db.prepareStatement("DELETE FROM CS WHERE QuestionID = ?");
+            PreparedStatement ps = Main.db.prepareStatement("DELETE FROM Physics WHERE QuestionID = ?");
             ps.setInt(1,QuestionID);
             ps.executeUpdate();
 

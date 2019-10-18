@@ -1,12 +1,15 @@
+package Controllers;
+import Server.Main;
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
 
 public class UserController {
-    // This method lists users from the database, including their firstname, score, etc. For test purposes the password is not encrypted, or censored in anyway.
+    // This method lists users from the database, including their firstname, surname, etc. For test purposes the password is not encrypted, or censored in anyway.
     public static void ListUsers(){
         try{
-            PreparedStatement ps = db.prepareStatement("SELECT UserID, Username, Password, FirstName, Surname, Score FROM UserDetails");
+            PreparedStatement ps = Main.db.prepareStatement("SELECT UserID, Username, Password, FirstName, Surname FROM UserDetails");
             ResultSet results = ps.executeQuery();
             while(results.next()){    //Method keeps getting data until it reaches the end of the database.
                 int UserID = results.getInt(1);
@@ -14,8 +17,7 @@ public class UserController {
                 String Password = results.getString(3);
                 String FirstName = results.getString(4);
                 String Surname = results.getString(5);
-                int Score = results.getInt(6);
-                System.out.println(UserID + " " + Username + " " + Password + " " + FirstName + " " + Surname + " " + Score);
+                System.out.println(UserID + " " + Username + " " + Password + " " + FirstName + " " + Surname);
 
             }
         }catch (Exception exception){
@@ -24,15 +26,14 @@ public class UserController {
     }
 
     // This method inserts a new user record into the user details table
-    public static void InsertIntoUsers(int UserID, String Username, String Password, String FirstName, String Surname, String Score){
+    public static void InsertIntoUsers(int UserID, String Username, String Password, String FirstName, String Surname){
         try{
-            PreparedStatement ps = db.prepareStatement("INSERT INTO UserDetails(UserID, Username, Password, FirstName, Surname, Score) VALUES (?,?,?,?,?)");
+            PreparedStatement ps = Main.db.prepareStatement("INSERT INTO UserDetails(UserID, Username, Password, FirstName, Surname) VALUES (?,?,?,?,?)");
             ps.setInt(1, UserID);
             ps.setString(2, Username);
             ps.setString(3, Password);
             ps.setString(4, FirstName);
             ps.setString(5, Surname);
-            ps.setString(6, Score);
             ps.executeUpdate();
             System.out.println("Record added to UserDetails Table");
 
@@ -44,14 +45,13 @@ public class UserController {
 
 
     //This method updates any records in the database table, it goes through each record parameter.
-    public static void UpdateUserDetails (int UserID, String Username, String Password, String FirstName, String Surname, String Score){
+    public static void UpdateUserDetails(int UserID, String Username, String Password, String FirstName, String Surname){
         try{
-            PreparedStatement ps = db.prepareStatement("UPDATE UserDetails SET Username = ?, FirstName = ?, Surname = ?, Score = ? WHERE UserID = ?");
+            PreparedStatement ps = Main.db.prepareStatement("UPDATE UserDetails SET Username = ?, FirstName = ?, Surname = ? WHERE UserID = ?");
             ps.setString(1,Username);
             ps.setString(2,Password);
             ps.setString(3,FirstName);
             ps.setString(4,Surname);
-            ps.setString(5,Score);
             ps.executeUpdate();
 
         }catch(Exception exception){
@@ -63,7 +63,7 @@ public class UserController {
     // This method lets you delete any records from the database, by UserID
     public static void DeleteUserDetails(int UserID){
         try{
-            PreparedStatement ps = db.prepareStatement("DELETE FROM UserDetails WHERE UserID = ?");
+            PreparedStatement ps = Main.db.prepareStatement("DELETE FROM UserDetails WHERE UserID = ?");
             ps.setInt(1,UserID);
             ps.executeUpdate();
 
