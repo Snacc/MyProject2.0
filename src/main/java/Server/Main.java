@@ -36,6 +36,9 @@ public class Main {
             Controllers.MathsController.ListMaths();
             Controllers.PhysicsController.ListPhysics();
             Controllers.CSController.ListCS();
+            Controllers.UserController.InsertIntoUsers(2,"Skelly","Skrat", "Michael","Kelly");
+            Controllers.UserController.UpdateUserDetails("Hello","Goodbye","Martin","Mundell",1);
+            Controllers.UserController.DeleteUserDetails(2);
 
 
         }

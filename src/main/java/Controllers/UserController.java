@@ -45,13 +45,14 @@ public class UserController {
 
 
     //This method updates any records in the database table, it goes through each record parameter.
-    public static void UpdateUserDetails(int UserID, String Username, String Password, String FirstName, String Surname){
+    public static void UpdateUserDetails(String Username, String Password, String FirstName, String Surname, int UserID){
         try{
-            PreparedStatement ps = Main.db.prepareStatement("UPDATE UserDetails SET Username = ?, FirstName = ?, Surname = ? WHERE UserID = ?");
+            PreparedStatement ps = Main.db.prepareStatement("UPDATE UserDetails SET Username = ?, Password = ?, FirstName = ?, Surname = ? WHERE UserID = ?");
             ps.setString(1,Username);
             ps.setString(2,Password);
             ps.setString(3,FirstName);
             ps.setString(4,Surname);
+            ps.setInt(5,UserID);
             ps.executeUpdate();
 
         }catch(Exception exception){
