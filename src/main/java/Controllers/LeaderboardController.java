@@ -1,11 +1,11 @@
 package Controllers;
 import Server.Main;
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
 public class LeaderboardController {
 
+    //This method lists all scoreboard records
     public static void ListScoreboard(){
         try{
             PreparedStatement ps = Main.db.prepareStatement("SELECT LeaderboardID, Username, Score FROM Leaderboard");
@@ -22,6 +22,7 @@ public class LeaderboardController {
         }
     }
 
+    // This method will insert a new record into the leaderboard table
     public static void InsertIntoLeaderboard(int LeaderboardID, String Username, int Score){
 
         try{
@@ -40,6 +41,8 @@ public class LeaderboardController {
 
     }
 
+
+    // This method updates a single record in the leaderboard table
     public static void UpdateLeaderboard(String Username, int Score){
         try{
             PreparedStatement ps = Main.db.prepareStatement("UPDATE Leaderboard SET Username = ?, Score = ? WHERE LeaderboardID = ?");
@@ -53,6 +56,7 @@ public class LeaderboardController {
         }
     }
 
+    //This method deletes a record in the leaderboard table
     public static void DeleteLeaderboard(int LeaderboardID){
         try{
             PreparedStatement ps = Main.db.prepareStatement("DELETE FROM Leaderboard WHERE LeaderboardID = ?");

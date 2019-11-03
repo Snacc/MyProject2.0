@@ -1,10 +1,10 @@
 package Controllers;
 import Server.Main;
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
 public class MathsController {
+    //Lists records in the maths table
     public static void ListMaths(){
         try{
             PreparedStatement ps = Main.db.prepareStatement("SELECT QuestionID, Subtopic, Question, AnswerA, AnswerB, AnswerC, AnswerD FROM Maths");
@@ -25,6 +25,7 @@ public class MathsController {
         }
     }
 
+    //Inserts a record into the maths table
     public static void InsertIntoMaths(int QuestionID, String Question, String Subtopic, String AnswerA, String AnswerB, String AnswerC, String AnswerD){
         try{
             PreparedStatement ps = Main.db.prepareStatement("INSERT INTO Maths(QuestionID, Subtopic, Question, AnswerA, AnswerB, AnswerC, AnswerD) VALUES (?,?,?,?,?,?,?)");
@@ -44,6 +45,7 @@ public class MathsController {
         }
     }
 
+    //Updates a record in the maths table
     public static void UpdateMaths(String Subtopic, String Question, String AnswerA, String AnswerB, String AnswerC, String AnswerD){
         try{
             PreparedStatement ps = Main.db.prepareStatement("UPDATE Maths SET Subtopic = ?, Question = ?, AnswerA = ?, AnswerB = ?, AnswerC = ?, AnswerD = ? WHERE UserID = ?");
@@ -61,6 +63,7 @@ public class MathsController {
         }
     }
 
+    //Deletes a record in the maths table
     public static void DeleteMaths(int QuestionID){
         try{
             PreparedStatement ps = Main.db.prepareStatement("DELETE FROM Maths WHERE QuestionID = ?");

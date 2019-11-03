@@ -1,10 +1,10 @@
 package Controllers;
 import Server.Main;
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
 public class CSController {
+    //Method which lists the computer science
     public static void ListCS(){
         try{
             PreparedStatement ps = Main.db.prepareStatement("SELECT QuestionID, Subtopic, Question, AnswerA, AnswerB, AnswerC, AnswerD FROM CS");
@@ -25,6 +25,7 @@ public class CSController {
         }
     }
 
+    //Method which inserts a record into the computer science table
     public static void InsertIntoCS(int QuestionID, String Question, String Subtopic, String AnswerA, String AnswerB, String AnswerC, String AnswerD){
         try{
             PreparedStatement ps = Main.db.prepareStatement("INSERT INTO CS(QuestionID, Subtopic, Question, AnswerA, AnswerB, AnswerC, AnswerD) VALUES (?,?,?,?,?,?,?)");
@@ -44,6 +45,7 @@ public class CSController {
         }
     }
 
+    //Updates a record in the computer science table
     public static void UpdateCS (String Subtopic, String Question, String AnswerA, String AnswerB, String AnswerC, String AnswerD){
         try{
             PreparedStatement ps = Main.db.prepareStatement("UPDATE CS SET Subtopic = ?, Question = ?, AnswerA = ?, AnswerB = ?, AnswerC = ?, AnswerD = ? WHERE UserID = ?");
@@ -61,6 +63,7 @@ public class CSController {
         }
     }
 
+    //Deletes a record in the computer science table
     public static void DeleteCS(int QuestionID){
         try{
             PreparedStatement ps = Main.db.prepareStatement("DELETE FROM CS WHERE QuestionID = ?");

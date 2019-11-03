@@ -1,76 +1,147 @@
 package Controllers;
 import Server.Main;
-import java.sql.Connection;
+import com.sun.jersey.multipart.FormDataParam;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+
+import javax.print.attribute.standard.Media;
+import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
 
 public class UserController {
     // This method lists users from the database, including their firstname, surname, etc. For test purposes the password is not encrypted, or censored in anyway.
-    public static void ListUsers(){
+    @GET
+    @Path("list")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String ListUsers(){
+        System.out.println("userdetails/list");
+        JSONArray list = new JSONArray();
         try{
             PreparedStatement ps = Main.db.prepareStatement("SELECT UserID, Username, Password, FirstName, Surname FROM UserDetails");
             ResultSet results = ps.executeQuery();
             while(results.next()){    //Method keeps getting data until it reaches the end of the database.
-                int UserID = results.getInt(1);
-                String Username = results.getString(2);
-                String Password = results.getString(3);
-                String FirstName = results.getString(4);
-                String Surname = results.getString(5);
-                System.out.println(UserID + " " + Username + " " + Password + " " + FirstName + " " + Surname);
-
+                JSONObject item = new JSONObject();
+                item.put("UserID", results.getInt(1));
+                item.put("Username", results.getString(2));
+                item.put("Password", results.getString(3));
+                item.put("FirstName", results.getString(4));
+                item.put("Surname", results.getString(5));
             }
+            return list.toString();
         }catch (Exception exception){
             System.out.println("Database error: " + exception.getMessage());
+            return "{\"error\": \"Unable to list items, please see server console for more info.\"}";
+        }
+    }
+
+    // Gets a single item from the table
+    @GET
+    @Path("get/{UserID}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String getThing(@PathParam("UserID") Integer UserID) throws Exception {
+        if(UserID==null){
+            throw new Exception("Thing's 'id' is missing in the HTTP request's URL.");
+
+        }
+        System.out.println("userdetails/get/" + UserID);
+        JSONObject item = new JSONObject();
+        try{
+            PreparedStatement ps = Main.db.prepareStatement("Select Username, Quantity FROM UserDetails WHERE UserID =?");
+            ps.setInt(1,UserID);
+            ResultSet results = ps.executeQuery();
+            if (results.next()){
+                item.put("UserID", UserID);
+                item.put("Username", results.getString(1));
+                item.put("Password",results.getString(2));
+                item.put("FirstName", results.getString(3));
+                item.put("Surname", results.getString(4));
+            }
+            return item.toString();
+
+        }catch (Exception exception){
+            System.out.println("Database error: " + exception.getMessage());
+            return "{\"error\": \"Unable to get item, please see server console for more info.\"}";
         }
     }
 
     // This method inserts a new user record into the user details table
-    public static void InsertIntoUsers(int UserID, String Username, String Password, String FirstName, String Surname){
+    @POST
+    @Path("new")
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    @Produces(MediaType.APPLICATION_JSON)
+    public String InsertIntoUsers(@FormDataParam("UserID") Integer UserID, @FormDataParam("Username") String Username, @FormDataParam("Password") String Password, @FormDataParam("FirstName") String FirstName, @FormDataParam("Surname") String Surname){
         try{
+            if (UserID == null || Username == null || FirstName == null || Surname == null){
+                throw new Exception("One or more form data parameters are missing in the HTTP request.");
+            }
+            System.out.println("userdetails/newid=" +UserID);
             PreparedStatement ps = Main.db.prepareStatement("INSERT INTO UserDetails(UserID, Username, Password, FirstName, Surname) VALUES (?,?,?,?,?)");
+
             ps.setInt(1, UserID);
             ps.setString(2, Username);
             ps.setString(3, Password);
             ps.setString(4, FirstName);
             ps.setString(5, Surname);
-            ps.executeUpdate();
-            System.out.println("Record added to UserDetails Table");
+            ps.execute();
+            return "{\"status\": \"OK\"}";
 
         }catch (Exception exception){
-            System.out.println(exception.getMessage());
-            System.out.println("Error: Something has gone wrong");
+            System.out.println("Database error: " + exception.getMessage());
+            return "{\"error\": \"Unable to create new item, please see server console for more info.\"}";
         }
     }
 
 
     //This method updates any records in the database table, it goes through each record parameter.
-    public static void UpdateUserDetails(String Username, String Password, String FirstName, String Surname, int UserID){
+    @POST
+    @Path("update")
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    @Produces(MediaType.APPLICATION_JSON)
+    public String UpdateUserDetails(@FormDataParam("UserID") Integer UserID, @FormDataParam("Username") String Username, @FormDataParam("Password") String Password, @FormDataParam("FirstName") String FirstName, @FormDataParam("Surname") String Surname){
         try{
-            PreparedStatement ps = Main.db.prepareStatement("UPDATE UserDetails SET Username = ?, Password = ?, FirstName = ?, Surname = ? WHERE UserID = ?");
+            if (UserID == null || Username == null || Password == null || FirstName == null || Surname == null){
+                throw new Exception("One or more form data parameters are missing in the HTTP request.");
+            }
+            System.out.println("userdetails/update UserID=" + UserID);
+            PreparedStatement ps = Main.db.prepareStatement("UPDATE UserDetails SET Username = ?, Password = ?, Firstname = ?, Surname = ? WHERE UserID = ?");
             ps.setString(1,Username);
             ps.setString(2,Password);
             ps.setString(3,FirstName);
             ps.setString(4,Surname);
             ps.setInt(5,UserID);
-            ps.executeUpdate();
+            ps.execute();
+            return "{\"status\": \"OK\"}";
 
         }catch(Exception exception){
-            System.out.println(exception.getMessage());
+            System.out.println("Database error: " + exception.getMessage());
+            return "{\"error\": \"Unable to update item please see server console for more info.\"}";
 
         }
     }
 
     // This method lets you delete any records from the database, by UserID
-    public static void DeleteUserDetails(int UserID){
+    @POST
+    @Path("delete")
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    @Produces(MediaType.APPLICATION_JSON)
+    public String DeleteUserDetails(@FormDataParam("UserID") Integer UserID){
         try{
+            if(UserID==null){
+                throw new Exception("One or more form data parameters are missing in the HTTP request.");
+            }
+            System.out.println("userdetails/delete UserID=" + UserID);
             PreparedStatement ps = Main.db.prepareStatement("DELETE FROM UserDetails WHERE UserID = ?");
             ps.setInt(1,UserID);
-            ps.executeUpdate();
+            ps.execute();
+            return"{\"status\": \"OK\"}";
 
 
         }catch (Exception exception){
-            System.out.println(exception.getMessage());
+            System.out.println("Database error:" + exception.getMessage());
+            return "{\"error\": \"Unable to delete item, please see server console for more info.\"}";
         }
     }
 }
