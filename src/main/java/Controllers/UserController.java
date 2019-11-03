@@ -4,13 +4,12 @@ import com.sun.jersey.multipart.FormDataParam;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
-import javax.print.attribute.standard.Media;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
-
+@Path("users")
 public class UserController {
     // This method lists users from the database, including their firstname, surname, etc. For test purposes the password is not encrypted, or censored in anyway.
     @GET
@@ -29,6 +28,7 @@ public class UserController {
                 item.put("Password", results.getString(3));
                 item.put("FirstName", results.getString(4));
                 item.put("Surname", results.getString(5));
+                list.add(item);
             }
             return list.toString();
         }catch (Exception exception){
@@ -49,7 +49,7 @@ public class UserController {
         System.out.println("userdetails/get/" + UserID);
         JSONObject item = new JSONObject();
         try{
-            PreparedStatement ps = Main.db.prepareStatement("Select Username, Quantity FROM UserDetails WHERE UserID =?");
+            PreparedStatement ps = Main.db.prepareStatement("Select Username, Password, FirstName, Surname FROM UserDetails WHERE UserID =?");
             ps.setInt(1,UserID);
             ResultSet results = ps.executeQuery();
             if (results.next()){
@@ -74,7 +74,7 @@ public class UserController {
     @Produces(MediaType.APPLICATION_JSON)
     public String InsertIntoUsers(@FormDataParam("UserID") Integer UserID, @FormDataParam("Username") String Username, @FormDataParam("Password") String Password, @FormDataParam("FirstName") String FirstName, @FormDataParam("Surname") String Surname){
         try{
-            if (UserID == null || Username == null || FirstName == null || Surname == null){
+            if (UserID == null || Username == null || Password == null || FirstName == null || Surname == null){
                 throw new Exception("One or more form data parameters are missing in the HTTP request.");
             }
             System.out.println("userdetails/newid=" +UserID);
