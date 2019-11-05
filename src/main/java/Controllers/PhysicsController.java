@@ -1,6 +1,7 @@
 package Controllers;
 import Server.Main;
-import com.sun.jersey.multipart.FormDataParam;
+
+import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -9,6 +10,7 @@ import javax.ws.rs.core.MediaType;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
+@Path("physics")
 public class PhysicsController {
     //Lists the records in the physics table
     @GET
@@ -46,7 +48,7 @@ public class PhysicsController {
             throw new Exception("Thing's 'id' is missing in the HTTP request's URL.");
 
         }
-        System.out.println("physics/get/" + QuestionID);
+        System.out.println("physics/get" + QuestionID);
         JSONObject item = new JSONObject();
         try{
             PreparedStatement ps = Main.db.prepareStatement("Select Subtopic, Question, AnswerA, AnswerB, AnswerC, AnswerD FROM Physics WHERE QuestionID =?");

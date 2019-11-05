@@ -1,6 +1,6 @@
 package Controllers;
 import Server.Main;
-import com.sun.jersey.multipart.FormDataParam;
+import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -9,6 +9,7 @@ import javax.ws.rs.core.MediaType;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
+@Path("leaderboard")
 public class LeaderboardController {
 
     //This method lists all scoreboard records

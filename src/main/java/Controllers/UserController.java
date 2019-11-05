@@ -1,6 +1,7 @@
 package Controllers;
 import Server.Main;
-import com.sun.jersey.multipart.FormDataParam;
+
+import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -16,7 +17,7 @@ public class UserController {
     @Path("list")
     @Produces(MediaType.APPLICATION_JSON)
     public String ListUsers(){
-        System.out.println("userdetails/list");
+        System.out.println("users/list");
         JSONArray list = new JSONArray();
         try{
             PreparedStatement ps = Main.db.prepareStatement("SELECT UserID, Username, Password, FirstName, Surname FROM UserDetails");
@@ -46,7 +47,7 @@ public class UserController {
             throw new Exception("Thing's 'id' is missing in the HTTP request's URL.");
 
         }
-        System.out.println("userdetails/get/" + UserID);
+        System.out.println("users/get/" + UserID);
         JSONObject item = new JSONObject();
         try{
             PreparedStatement ps = Main.db.prepareStatement("Select Username, Password, FirstName, Surname FROM UserDetails WHERE UserID =?");
@@ -68,6 +69,7 @@ public class UserController {
     }
 
     // This method inserts a new user record into the user details table
+
     @POST
     @Path("new")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
@@ -77,7 +79,7 @@ public class UserController {
             if (UserID == null || Username == null || Password == null || FirstName == null || Surname == null){
                 throw new Exception("One or more form data parameters are missing in the HTTP request.");
             }
-            System.out.println("userdetails/newid=" +UserID);
+            System.out.println("users/newid=" +UserID);
             PreparedStatement ps = Main.db.prepareStatement("INSERT INTO UserDetails(UserID, Username, Password, FirstName, Surname) VALUES (?,?,?,?,?)");
 
             ps.setInt(1, UserID);
@@ -105,7 +107,7 @@ public class UserController {
             if (UserID == null || Username == null || Password == null || FirstName == null || Surname == null){
                 throw new Exception("One or more form data parameters are missing in the HTTP request.");
             }
-            System.out.println("userdetails/update UserID=" + UserID);
+            System.out.println("users/update UserID=" + UserID);
             PreparedStatement ps = Main.db.prepareStatement("UPDATE UserDetails SET Username = ?, Password = ?, Firstname = ?, Surname = ? WHERE UserID = ?");
             ps.setString(1,Username);
             ps.setString(2,Password);
@@ -132,7 +134,7 @@ public class UserController {
             if(UserID==null){
                 throw new Exception("One or more form data parameters are missing in the HTTP request.");
             }
-            System.out.println("userdetails/delete UserID=" + UserID);
+            System.out.println("users/delete UserID=" + UserID);
             PreparedStatement ps = Main.db.prepareStatement("DELETE FROM UserDetails WHERE UserID = ?");
             ps.setInt(1,UserID);
             ps.execute();
@@ -144,4 +146,6 @@ public class UserController {
             return "{\"error\": \"Unable to delete item, please see server console for more info.\"}";
         }
     }
+
+
 }

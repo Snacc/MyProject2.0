@@ -1,6 +1,7 @@
 package Controllers;
 import Server.Main;
-import com.sun.jersey.multipart.FormDataParam;
+
+import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -9,6 +10,7 @@ import javax.ws.rs.core.MediaType;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
+@Path("maths")
 public class MathsController {
     //Lists records in the maths table
     @GET
@@ -74,7 +76,7 @@ public class MathsController {
     @Path("new")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.APPLICATION_JSON)
-    public String InsertIntoMaths(@FormDataParam("QuestionID") Integer QuestionID, @FormDataParam("Subtopic") String Subtopic, @FormDataParam("Question") String Question,@FormDataParam("AnswerA") String AnswerA,@FormDataParam("AnswerB") String AnswerB,@FormDataParam("AnswerC") String AnswerC,@FormDataParam("AnswerD") String AnswerD){
+    public String InsertIntoMaths(@FormDataParam("QuestionID") Integer QuestionID, @FormDataParam("Subtopic") String Subtopic, @FormDataParam("Question") String Question, @FormDataParam("AnswerA") String AnswerA, @FormDataParam("AnswerB") String AnswerB, @FormDataParam("AnswerC") String AnswerC, @FormDataParam("AnswerD") String AnswerD){
         try{
             if (QuestionID == null || Subtopic == null || Question == null || AnswerA == null || AnswerB == null || AnswerC ==null || AnswerD == null){
                 throw new Exception("One or more form data parameters are missing in the HTTP request.");
