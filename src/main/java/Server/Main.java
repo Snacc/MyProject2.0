@@ -36,7 +36,7 @@ public class Main {
         }
     }
 
-    //Main
+    //Main all main code goes here
     public static void main(String[] args) {
         openDatabase();
 
@@ -46,12 +46,12 @@ public class Main {
         ServletHolder servlet = new ServletHolder(new ServletContainer(config));
 
         Server server = new Server(8081);
-        ServletContextHandler context = new ServletContextHandler(server, "/");
+        ServletContextHandler context = new ServletContextHandler(server, "/"); //defines how each api path starts
         context.addServlet(servlet, "/*");
 
         try {
             server.start();
-            System.out.println("Server successfully started.");
+            System.out.println("Server successfully started.");  //starts the server
             server.join();
         } catch (Exception e) {
             e.printStackTrace();

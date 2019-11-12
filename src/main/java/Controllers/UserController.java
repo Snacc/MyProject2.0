@@ -20,7 +20,7 @@ public class UserController {
         System.out.println("users/list");
         JSONArray list = new JSONArray();
         try{
-            PreparedStatement ps = Main.db.prepareStatement("SELECT UserID, Username, Password, FirstName, Surname FROM UserDetails");
+            PreparedStatement ps = Main.db.prepareStatement("SELECT UserID, Username, Password, FirstName, Surname FROM Users");
             ResultSet results = ps.executeQuery();
             while(results.next()){    //Method keeps getting data until it reaches the end of the database.
                 JSONObject item = new JSONObject();
@@ -50,7 +50,7 @@ public class UserController {
         System.out.println("users/get/" + UserID);
         JSONObject item = new JSONObject();
         try{
-            PreparedStatement ps = Main.db.prepareStatement("Select Username, Password, FirstName, Surname FROM UserDetails WHERE UserID =?");
+            PreparedStatement ps = Main.db.prepareStatement("Select Username, Password, FirstName, Surname FROM Users WHERE UserID =?");
             ps.setInt(1,UserID);
             ResultSet results = ps.executeQuery();
             if (results.next()){
@@ -80,7 +80,7 @@ public class UserController {
                 throw new Exception("One or more form data parameters are missing in the HTTP request.");
             }
             System.out.println("users/newid=" +UserID);
-            PreparedStatement ps = Main.db.prepareStatement("INSERT INTO UserDetails(UserID, Username, Password, FirstName, Surname) VALUES (?,?,?,?,?)");
+            PreparedStatement ps = Main.db.prepareStatement("INSERT INTO Users(UserID, Username, Password, FirstName, Surname) VALUES (?,?,?,?,?)");
 
             ps.setInt(1, UserID);
             ps.setString(2, Username);
@@ -102,13 +102,13 @@ public class UserController {
     @Path("update")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.APPLICATION_JSON)
-    public String UpdateUserDetails(@FormDataParam("UserID") Integer UserID, @FormDataParam("Username") String Username, @FormDataParam("Password") String Password, @FormDataParam("FirstName") String FirstName, @FormDataParam("Surname") String Surname){
+    public String UpdateUsers(@FormDataParam("UserID") Integer UserID, @FormDataParam("Username") String Username, @FormDataParam("Password") String Password, @FormDataParam("FirstName") String FirstName, @FormDataParam("Surname") String Surname){
         try{
             if (UserID == null || Username == null || Password == null || FirstName == null || Surname == null){
                 throw new Exception("One or more form data parameters are missing in the HTTP request.");
             }
             System.out.println("users/update UserID=" + UserID);
-            PreparedStatement ps = Main.db.prepareStatement("UPDATE UserDetails SET Username = ?, Password = ?, Firstname = ?, Surname = ? WHERE UserID = ?");
+            PreparedStatement ps = Main.db.prepareStatement("UPDATE Users SET Username = ?, Password = ?, Firstname = ?, Surname = ? WHERE UserID = ?");
             ps.setString(1,Username);
             ps.setString(2,Password);
             ps.setString(3,FirstName);
@@ -129,13 +129,13 @@ public class UserController {
     @Path("delete")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.APPLICATION_JSON)
-    public String DeleteUserDetails(@FormDataParam("UserID") Integer UserID){
+    public String DeleteUsers(@FormDataParam("UserID") Integer UserID){
         try{
             if(UserID==null){
                 throw new Exception("One or more form data parameters are missing in the HTTP request.");
             }
             System.out.println("users/delete UserID=" + UserID);
-            PreparedStatement ps = Main.db.prepareStatement("DELETE FROM UserDetails WHERE UserID = ?");
+            PreparedStatement ps = Main.db.prepareStatement("DELETE FROM Users WHERE UserID = ?");
             ps.setInt(1,UserID);
             ps.execute();
             return"{\"status\": \"OK\"}";
@@ -147,7 +147,7 @@ public class UserController {
         }
     }
 
-    /*
+
     @POST
     @Path("login")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
@@ -155,12 +155,15 @@ public class UserController {
     public String Login(@FormDataParam("Username") String Username, @FormDataParam("Password") String Password){
         try{
             if(Username == null || Password == null){
-                throw new Exception("One or more login parameters are missing");
+                throw new Exception("One or more login parameters are missing in the request");
             }
+            System.out.println("/user/login attempt by" + Username);
+
+            PreparedStatement ps = Main.db.prepareStatement("SELECT Username, Password ")
         }
 
     }
-    */
+
 
 
 }
