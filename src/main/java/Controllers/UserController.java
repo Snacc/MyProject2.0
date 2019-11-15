@@ -1,6 +1,7 @@
 package Controllers;
 import Server.Main;
 
+
 import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -18,7 +19,7 @@ public class UserController {
     @Produces(MediaType.APPLICATION_JSON)
     public String ListUsers(){
         System.out.println("users/list");
-        JSONArray list = new JSONArray();
+        JSONArray list = new JSONArray(); //creates a JSON array which will list the data in Git Bash
         try{
             PreparedStatement ps = Main.db.prepareStatement("SELECT UserID, Username, Password, FirstName, Surname FROM Users");
             ResultSet results = ps.executeQuery();
@@ -44,11 +45,11 @@ public class UserController {
     @Produces(MediaType.APPLICATION_JSON)
     public String getThing(@PathParam("UserID") Integer UserID) throws Exception {
         if(UserID==null){
-            throw new Exception("Thing's 'id' is missing in the HTTP request's URL.");
+            throw new Exception("Thing's 'id' is missing in the HTTP request's URL."); //If the userID input is null, or incorrect, then it throws an exception
 
         }
-        System.out.println("users/get/" + UserID);
-        JSONObject item = new JSONObject();
+        System.out.println("users/get/" + UserID); //Prints out this in the server console.
+        JSONObject item = new JSONObject(); //This takes the data from database and creates a JSONObject, which is outputted into GitBash.
         try{
             PreparedStatement ps = Main.db.prepareStatement("Select Username, Password, FirstName, Surname FROM Users WHERE UserID =?");
             ps.setInt(1,UserID);
@@ -76,10 +77,10 @@ public class UserController {
     @Produces(MediaType.APPLICATION_JSON)
     public String InsertIntoUsers(@FormDataParam("UserID") Integer UserID, @FormDataParam("Username") String Username, @FormDataParam("Password") String Password, @FormDataParam("FirstName") String FirstName, @FormDataParam("Surname") String Surname){
         try{
-            if (UserID == null || Username == null || Password == null || FirstName == null || Surname == null){
+            if (UserID == null || Username == null || Password == null || FirstName == null || Surname == null){ //If inputs are null, throws exeception.
                 throw new Exception("One or more form data parameters are missing in the HTTP request.");
             }
-            System.out.println("users/newid=" +UserID);
+            System.out.println("users/newid=" +UserID); // Outputs in console log
             PreparedStatement ps = Main.db.prepareStatement("INSERT INTO Users(UserID, Username, Password, FirstName, Surname) VALUES (?,?,?,?,?)");
 
             ps.setInt(1, UserID);
@@ -88,7 +89,7 @@ public class UserController {
             ps.setString(4, FirstName);
             ps.setString(5, Surname);
             ps.execute();
-            return "{\"status\": \"OK\"}";
+            return "{\"status\": \"OK\"}"; //returns a status token if it has been executed successfully.
 
         }catch (Exception exception){
             System.out.println("Database error: " + exception.getMessage());
@@ -131,7 +132,7 @@ public class UserController {
     @Produces(MediaType.APPLICATION_JSON)
     public String DeleteUsers(@FormDataParam("UserID") Integer UserID){
         try{
-            if(UserID==null){
+            if(UserID==null){ //If inputted value is empty/incorrect, throw an exception.
                 throw new Exception("One or more form data parameters are missing in the HTTP request.");
             }
             System.out.println("users/delete UserID=" + UserID);
@@ -147,7 +148,7 @@ public class UserController {
         }
     }
 
-
+    /*
     @POST
     @Path("login")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
@@ -163,7 +164,7 @@ public class UserController {
         }
 
     }
-
+    */
 
 
 }
