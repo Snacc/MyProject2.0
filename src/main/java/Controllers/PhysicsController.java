@@ -32,6 +32,7 @@ public class PhysicsController {
                 item.put("AnswerB", results.getString(5));
                 item.put("AnswerC", results.getString(6));
                 item.put("AnswerD", results.getString(7));
+                list.add(item);
 
             }
             return list.toString();
@@ -63,6 +64,7 @@ public class PhysicsController {
                 item.put("AnswerB", results.getString(4));
                 item.put("AnswerC", results.getString(5));
                 item.put("AnswerD", results.getString(6));
+
             }
             return item.toString();
 

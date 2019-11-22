@@ -28,7 +28,8 @@ public class LeaderboardController {
                 JSONObject item = new JSONObject();
                 item.put("LeaderboardID", results.getInt(1));
                 item.put("Username", results.getString(2));
-                item.put("Password", results.getString(3));
+                item.put("Score", results.getString(3));
+                list.add(item);
 
             }
             return list.toString();

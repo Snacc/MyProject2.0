@@ -32,6 +32,7 @@ public class CSController {
                 item.put("AnswerB", results.getString(5));
                 item.put("AnswerC", results.getString(6));
                 item.put("AnswerD", results.getString(7));
+                list.add(item);
 
             }
             return list.toString();
