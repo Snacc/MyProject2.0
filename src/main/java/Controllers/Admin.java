@@ -11,6 +11,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.UUID;
 
 @Path("admin")
 public class Admin {
@@ -138,6 +139,43 @@ public class Admin {
         }catch (Exception exception){
             System.out.println("Database error:" + exception.getMessage());
             return "{\"error\": \"Unable to delete item, please see server console for more info.\"}";
+        }
+    }
+
+
+    @POST
+    @Path("login")
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    @Produces(MediaType.APPLICATION_JSON)
+    public String adminLogin(@FormDataParam("Username") String Username,@FormDataParam("Password") String Password){
+        try{
+            PreparedStatement ps = Main.db.prepareStatement("SELECT Password FROM Admin WHERE Username = ?");
+            ps.setString(1, Username);
+            ResultSet loginResults = ps.executeQuery();
+            if(loginResults.next()){
+                String correctPassword=loginResults.getString(1);//verifies password is correct on database
+                if(Password.equals(correctPassword)){
+                    String Token = UUID.randomUUID().toString(); //token is created
+                    PreparedStatement ps2 = Main.db.prepareStatement("UPDATE Admin SET Token = ? WHERE Username = ?");
+                    ps2.setString(1, Token);
+                    ps2.setString(2, Username);
+                    ps2.executeUpdate();
+
+                    return "{\"Token\": \"" + Token + "\"}"; //returns the generated token
+
+
+
+
+                } else {
+                    return "{\"error\": \"Incorrect password!\"}";
+                }
+            } else{
+                return "{\"error\": \"Incorrect password!\"}";
+
+            }
+        } catch (Exception exception){
+            System.out.println("Database error during /admin/login: " + exception.getMessage());
+            return "{\"error\": \"Server side error!\"}";
         }
     }
 }

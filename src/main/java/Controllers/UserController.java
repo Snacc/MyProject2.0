@@ -2,6 +2,7 @@ package Controllers;
 import Server.Main;
 
 
+import com.sun.jersey.core.header.Token;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -10,6 +11,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.UUID;
 
 @Path("users")
 public class UserController {
@@ -148,23 +150,44 @@ public class UserController {
         }
     }
 
-    /*
+    //login method - produces a token for logged in user
     @POST
     @Path("login")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.APPLICATION_JSON)
-    public String Login(@FormDataParam("Username") String Username, @FormDataParam("Password") String Password){
+    public String userLogin(@FormDataParam("Username") String Username,@FormDataParam("Password") String Password){
         try{
-            if(Username == null || Password == null){
-                throw new Exception("One or more login parameters are missing in the request");
+            PreparedStatement ps = Main.db.prepareStatement("SELECT Password FROM Users WHERE Username = ?");
+            ps.setString(1, Username);
+            ResultSet loginResults = ps.executeQuery();
+            if(loginResults.next()){
+                String correctPassword=loginResults.getString(1);//verifies password is correct on database
+                if(Password.equals(correctPassword)){
+                    String Token = UUID.randomUUID().toString(); //token is created
+                    PreparedStatement ps2 = Main.db.prepareStatement("UPDATE Users SET Token = ? WHERE Username = ?");
+                    ps2.setString(1, Token);
+                    ps2.setString(2, Username);
+                    ps2.executeUpdate();
+
+                    return "{\"Token\": \"" + Token + "\"}"; //returns the generated token
+
+
+
+
+                } else {
+                    return "{\"error\": \"Incorrect password!\"}";
+                }
+            } else{
+                return "{\"error\": \"Incorrect password!\"}";
+
             }
-            System.out.println("/user/login attempt by" + Username);
-
-            PreparedStatement ps = Main.db.prepareStatement("SELECT Username, Password ")
+        } catch (Exception exception){
+            System.out.println("Database error during /user/login: " + exception.getMessage());
+            return "{\"error\": \"Server side error!\"}";
         }
-
     }
-    */
+
+
 
 
 }
