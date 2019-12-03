@@ -175,10 +175,10 @@ public class UserController {
 
 
                 } else {
-                    return "{\"error\": \"Incorrect password!\"}";
+                    return "{\"error\": \"Incorrect password!\"}"; //if password is incorrect
                 }
             } else{
-                return "{\"error\": \"Incorrect password!\"}";
+                return "{\"error\": \"Incorrect password!\"}"; //if password is incorrect
 
             }
         } catch (Exception exception){
@@ -186,6 +186,28 @@ public class UserController {
             return "{\"error\": \"Server side error!\"}";
         }
     }
+
+    //logout method
+    @POST
+    @Path("logout")
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    @Produces(MediaType.APPLICATION_JSON)
+    public String userLogout(@CookieParam("Token") String Token){ //takes corresponding user's token
+        try{
+            PreparedStatement statement = Main.db.prepareStatement("Update Users SET Token = NULL WHERE Token = ?");
+            statement.setString(1, Token);
+            statement.executeUpdate();
+            return"{\"status\": \"OK\"}";
+
+        } catch (Exception exception){
+            System.out.println("Database error during /users/logout - could not update" +exception.getMessage()); //prints error in console
+            return "{\"error\": \"Server side error!\"}"; //prints error for user
+        }
+
+    }
+
+
+
 
 
 
