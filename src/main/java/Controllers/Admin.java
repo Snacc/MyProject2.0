@@ -99,7 +99,7 @@ public class Admin {
     @Path("update")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.APPLICATION_JSON)
-    public String UpdateAdmin(@FormDataParam("AdminID") Integer AdminID, @FormDataParam("Username") String Username, @FormDataParam("Password") String Password){
+    public String UpdateAdmin(@FormDataParam("AdminID") Integer AdminID, @FormDataParam("Username") String Username, @FormDataParam("Password") String Password, @CookieParam("Token") String Token){
         try{
             if (AdminID == null || Username == null || Password == null){
                 throw new Exception("One or more form data parameters are missing in the HTTP request.");
@@ -124,7 +124,7 @@ public class Admin {
     @Path("delete")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.APPLICATION_JSON)
-    public String DeleteAdmin(@FormDataParam("AdminID") Integer AdminID){
+    public String DeleteAdmin(@FormDataParam("AdminID") Integer AdminID, @CookieParam("Token") String Token){
         try{
             if(AdminID==null){
                 throw new Exception("One or more form data parameters are missing in the HTTP request.");

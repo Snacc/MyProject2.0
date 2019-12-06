@@ -78,7 +78,7 @@ public class MathsController {
     @Path("new")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.APPLICATION_JSON)
-    public String InsertIntoMaths(@FormDataParam("QuestionID") Integer QuestionID, @FormDataParam("Subtopic") String Subtopic, @FormDataParam("Question") String Question, @FormDataParam("AnswerA") String AnswerA, @FormDataParam("AnswerB") String AnswerB, @FormDataParam("AnswerC") String AnswerC, @FormDataParam("AnswerD") String AnswerD){
+    public String InsertIntoMaths(@FormDataParam("QuestionID") Integer QuestionID, @FormDataParam("Subtopic") String Subtopic, @FormDataParam("Question") String Question, @FormDataParam("AnswerA") String AnswerA, @FormDataParam("AnswerB") String AnswerB, @FormDataParam("AnswerC") String AnswerC, @FormDataParam("AnswerD") String AnswerD, @CookieParam("Token") String Token){
         try{
             if (QuestionID == null || Subtopic == null || Question == null || AnswerA == null || AnswerB == null || AnswerC ==null || AnswerD == null){
                 throw new Exception("One or more form data parameters are missing in the HTTP request.");
@@ -107,7 +107,7 @@ public class MathsController {
     @Path("update")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.APPLICATION_JSON)
-    public String UpdateMaths(@FormDataParam("QuestionID") Integer QuestionID, @FormDataParam("Subtopic") String Subtopic, @FormDataParam("Question") String Question, @FormDataParam("AnswerA") String AnswerA,@FormDataParam("AnswerB") String AnswerB,@FormDataParam("AnswerC") String AnswerC, @FormDataParam("AnswerD") String AnswerD){
+    public String UpdateMaths(@FormDataParam("QuestionID") Integer QuestionID, @FormDataParam("Subtopic") String Subtopic, @FormDataParam("Question") String Question, @FormDataParam("AnswerA") String AnswerA,@FormDataParam("AnswerB") String AnswerB,@FormDataParam("AnswerC") String AnswerC, @FormDataParam("AnswerD") String AnswerD, @CookieParam("Token") String Token){
         try{
             if (QuestionID == null || Subtopic == null || Question == null || AnswerA ==null || AnswerB == null || AnswerC == null || AnswerD == null){
                 throw new Exception("One or more form data parameters are missing in the HTTP request.");
@@ -136,7 +136,7 @@ public class MathsController {
     @Path("delete")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.APPLICATION_JSON)
-    public String DeleteMaths(@FormDataParam("QuestionID") Integer QuestionID){
+    public String DeleteMaths(@FormDataParam("QuestionID") Integer QuestionID, @CookieParam("Token") String Token){
         try{
             if(QuestionID==null){
                 throw new Exception("One or more form data parameters are missing in the HTTP request.");

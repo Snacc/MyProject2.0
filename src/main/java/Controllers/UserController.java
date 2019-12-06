@@ -77,7 +77,10 @@ public class UserController {
     @Path("new")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.APPLICATION_JSON)
-    public String InsertIntoUsers(@FormDataParam("UserID") Integer UserID, @FormDataParam("Username") String Username, @FormDataParam("Password") String Password, @FormDataParam("FirstName") String FirstName, @FormDataParam("Surname") String Surname){
+    public String InsertIntoUsers(@FormDataParam("UserID") Integer UserID, @FormDataParam("Username") String Username, @FormDataParam("Password") String Password, @FormDataParam("FirstName") String FirstName, @FormDataParam("Surname") String Surname, @CookieParam("Token") String Token){
+        if(!UserID.validToken(Token)){
+            return "{\"error\": \"You don't appear to be logged in\"}";
+        }
         try{
             if (UserID == null || Username == null || Password == null || FirstName == null || Surname == null){ //If inputs are null, throws exeception.
                 throw new Exception("One or more form data parameters are missing in the HTTP request.");
@@ -105,7 +108,7 @@ public class UserController {
     @Path("update")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.APPLICATION_JSON)
-    public String UpdateUsers(@FormDataParam("UserID") Integer UserID, @FormDataParam("Username") String Username, @FormDataParam("Password") String Password, @FormDataParam("FirstName") String FirstName, @FormDataParam("Surname") String Surname){
+    public String UpdateUsers(@FormDataParam("UserID") Integer UserID, @FormDataParam("Username") String Username, @FormDataParam("Password") String Password, @FormDataParam("FirstName") String FirstName, @FormDataParam("Surname") String Surname, @CookieParam("Token") String Token){
         try{
             if (UserID == null || Username == null || Password == null || FirstName == null || Surname == null){
                 throw new Exception("One or more form data parameters are missing in the HTTP request.");
@@ -132,7 +135,7 @@ public class UserController {
     @Path("delete")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.APPLICATION_JSON)
-    public String DeleteUsers(@FormDataParam("UserID") Integer UserID){
+    public String DeleteUsers(@FormDataParam("UserID") Integer UserID, @CookieParam("Token") String Token){
         try{
             if(UserID==null){ //If inputted value is empty/incorrect, throw an exception.
                 throw new Exception("One or more form data parameters are missing in the HTTP request.");
@@ -155,7 +158,7 @@ public class UserController {
     @Path("login")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.APPLICATION_JSON)
-    public String userLogin(@FormDataParam("Username") String Username,@FormDataParam("Password") String Password){
+    public String userLogin(@FormDataParam("Username") String Username,@FormDataParam("Password") String Password, @CookieParam("Token") String Token){
         try{
             PreparedStatement ps = Main.db.prepareStatement("SELECT Password FROM Users WHERE Username = ?");
             ps.setString(1, Username);
@@ -163,7 +166,7 @@ public class UserController {
             if(loginResults.next()){
                 String correctPassword=loginResults.getString(1);//verifies password is correct on database
                 if(Password.equals(correctPassword)){
-                    String Token = UUID.randomUUID().toString(); //token is created
+                    Token = UUID.randomUUID().toString();
                     PreparedStatement ps2 = Main.db.prepareStatement("UPDATE Users SET Token = ? WHERE Username = ?");
                     ps2.setString(1, Token);
                     ps2.setString(2, Username);
@@ -183,7 +186,7 @@ public class UserController {
             }
         } catch (Exception exception){
             System.out.println("Database error during /user/login: " + exception.getMessage());
-            return "{\"error\": \"Server side error!\"}";
+            return "{\"error\": \"Server side error :(\"}";
         }
     }
 
@@ -194,14 +197,24 @@ public class UserController {
     @Produces(MediaType.APPLICATION_JSON)
     public String userLogout(@CookieParam("Token") String Token){ //takes corresponding user's token
         try{
-            PreparedStatement statement = Main.db.prepareStatement("Update Users SET Token = NULL WHERE Token = ?");
-            statement.setString(1, Token);
-            statement.executeUpdate();
-            return"{\"status\": \"OK\"}";
+            System.out.println("/users/logout");
+            PreparedStatement ps = Main.db.prepareStatement("SELECT UserID FROM Users WHERE Token =?");
+            ps.setString(1,Token);
+            ResultSet logoutResults = ps.executeQuery();
+            if (logoutResults.next()){
+                int ID = logoutResults.getInt(1);
+                PreparedStatement ps2 = Main.db.prepareStatement("UPDATE Users SET Token = NULL Where UserID = ?");
+                ps2.setInt(1,ID);
+                ps2.executeUpdate();
+                return "{\"status\": \"OK\"}";
+
+            } else{
+                return "{\"error\": \"Invalid token\"}";
+            }
 
         } catch (Exception exception){
             System.out.println("Database error during /users/logout - could not update" +exception.getMessage()); //prints error in console
-            return "{\"error\": \"Server side error!\"}"; //prints error for user
+            return "{\"error\": \"Server side error :(\"}"; //prints error for user
         }
 
     }
