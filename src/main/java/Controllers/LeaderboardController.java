@@ -1,6 +1,8 @@
 package Controllers;
 import Server.Main;
-import com.sun.jersey.multipart.FormDataParam;
+
+
+import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -9,6 +11,7 @@ import javax.ws.rs.core.MediaType;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
+@Path("leaderboard")
 public class LeaderboardController {
 
     //This method lists all scoreboard records
@@ -25,7 +28,8 @@ public class LeaderboardController {
                 JSONObject item = new JSONObject();
                 item.put("LeaderboardID", results.getInt(1));
                 item.put("Username", results.getString(2));
-                item.put("Password", results.getString(3));
+                item.put("Score", results.getString(3));
+                list.add(item);
 
             }
             return list.toString();
@@ -67,7 +71,7 @@ public class LeaderboardController {
     @Path("new")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.APPLICATION_JSON)
-    public String InsertIntoLeaderboard(@FormDataParam("LeaderboardID") Integer LeaderboardID, @FormDataParam("Username") String Username, @FormDataParam("Score") String Score){
+    public String InsertIntoLeaderboard(@FormDataParam("LeaderboardID") Integer LeaderboardID, @FormDataParam("Username") String Username, @FormDataParam("Score") String Score, @CookieParam("Token") String Token){
         try{
             if (LeaderboardID == null || Username == null){
                 throw new Exception("One or more form data parameters are missing in the HTTP request.");
@@ -93,7 +97,7 @@ public class LeaderboardController {
     @Path("update")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.APPLICATION_JSON)
-    public String UpdateLeaderboard(@FormDataParam("LeaderboardID") Integer LeaderboardID, @FormDataParam("Username") String Username, @FormDataParam("Score") String Score){
+    public String UpdateLeaderboard(@FormDataParam("LeaderboardID") Integer LeaderboardID, @FormDataParam("Username") String Username, @FormDataParam("Score") String Score, @CookieParam("Token") String Token){
         try{
             if (LeaderboardID == null || Username == null || Score == null){
                 throw new Exception("One or more form data parameters are missing in the HTTP request.");
@@ -118,7 +122,7 @@ public class LeaderboardController {
     @Path("delete")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.APPLICATION_JSON)
-    public String DeleteLeaderboard(@FormDataParam("LeaderboardID") Integer LeaderboardID){
+    public String DeleteLeaderboard(@FormDataParam("LeaderboardID") Integer LeaderboardID, @CookieParam("Token") String Token){
         try{
             if(LeaderboardID==null){
                 throw new Exception("One or more form data parameters are missing in the HTTP request.");

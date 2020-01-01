@@ -1,6 +1,8 @@
 package Controllers;
 import Server.Main;
-import com.sun.jersey.multipart.FormDataParam;
+
+
+import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -9,6 +11,7 @@ import javax.ws.rs.core.MediaType;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
+@Path("physics")
 public class PhysicsController {
     //Lists the records in the physics table
     @GET
@@ -29,6 +32,7 @@ public class PhysicsController {
                 item.put("AnswerB", results.getString(5));
                 item.put("AnswerC", results.getString(6));
                 item.put("AnswerD", results.getString(7));
+                list.add(item);
 
             }
             return list.toString();
@@ -46,7 +50,7 @@ public class PhysicsController {
             throw new Exception("Thing's 'id' is missing in the HTTP request's URL.");
 
         }
-        System.out.println("physics/get/" + QuestionID);
+        System.out.println("physics/get" + QuestionID);
         JSONObject item = new JSONObject();
         try{
             PreparedStatement ps = Main.db.prepareStatement("Select Subtopic, Question, AnswerA, AnswerB, AnswerC, AnswerD FROM Physics WHERE QuestionID =?");
@@ -60,6 +64,7 @@ public class PhysicsController {
                 item.put("AnswerB", results.getString(4));
                 item.put("AnswerC", results.getString(5));
                 item.put("AnswerD", results.getString(6));
+
             }
             return item.toString();
 
@@ -74,7 +79,7 @@ public class PhysicsController {
     @Path("new")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.APPLICATION_JSON)
-    public String InsertIntoPhysics(@FormDataParam("QuestionID") Integer QuestionID, @FormDataParam("Subtopic") String Subtopic, @FormDataParam("Question") String Question, @FormDataParam("AnswerA") String AnswerA, @FormDataParam("AnswerB") String AnswerB, @FormDataParam("AnswerC") String AnswerC, @FormDataParam("AnswerD") String AnswerD){
+    public String InsertIntoPhysics(@FormDataParam("QuestionID") Integer QuestionID, @FormDataParam("Subtopic") String Subtopic, @FormDataParam("Question") String Question, @FormDataParam("AnswerA") String AnswerA, @FormDataParam("AnswerB") String AnswerB, @FormDataParam("AnswerC") String AnswerC, @FormDataParam("AnswerD") String AnswerD, @CookieParam("Token") String Token){
         try{
             if (QuestionID == null || Subtopic == null || Question == null || AnswerA == null || AnswerB == null || AnswerC ==null || AnswerD == null){
                 throw new Exception("One or more form data parameters are missing in the HTTP request.");
@@ -103,7 +108,7 @@ public class PhysicsController {
     @Path("update")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.APPLICATION_JSON)
-    public String UpdatePhysics(@FormDataParam("QuestionID") Integer QuestionID, @FormDataParam("Subtopic") String Subtopic, @FormDataParam("Question") String Question, @FormDataParam("AnswerA") String AnswerA,@FormDataParam("AnswerB") String AnswerB,@FormDataParam("AnswerC") String AnswerC, @FormDataParam("AnswerD") String AnswerD){
+    public String UpdatePhysics(@FormDataParam("QuestionID") Integer QuestionID, @FormDataParam("Subtopic") String Subtopic, @FormDataParam("Question") String Question, @FormDataParam("AnswerA") String AnswerA,@FormDataParam("AnswerB") String AnswerB,@FormDataParam("AnswerC") String AnswerC, @FormDataParam("AnswerD") String AnswerD, @CookieParam("Token") String Token){
         try{
             if (QuestionID == null || Subtopic == null || Question == null || AnswerA ==null || AnswerB == null || AnswerC == null || AnswerD == null){
                 throw new Exception("One or more form data parameters are missing in the HTTP request.");
@@ -132,7 +137,7 @@ public class PhysicsController {
     @Path("delete")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.APPLICATION_JSON)
-    public String DeletePhysics(@FormDataParam("QuestionID") Integer QuestionID){
+    public String DeletePhysics(@FormDataParam("QuestionID") Integer QuestionID, @CookieParam("Token") String Token){
         try{
             if(QuestionID==null){
                 throw new Exception("One or more form data parameters are missing in the HTTP request.");
