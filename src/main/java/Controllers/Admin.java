@@ -73,7 +73,11 @@ public class Admin {
     @Path("new")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.APPLICATION_JSON)
-    public String InsertIntoAdmin(@FormDataParam("AdminID") Integer AdminID, @FormDataParam("Username") String Username, @FormDataParam("Password") String Password){
+    public String InsertIntoAdmin(@FormDataParam("AdminID") Integer AdminID, @FormDataParam("Username") String Username, @FormDataParam("Password") String Password, @FormDataParam("Token") String Token){
+        if (!User.validToken(Token)){
+            return "{\"error\": \"You don't appear to be logged in.\"}";
+
+        }
         try{
             if (AdminID == null || Username == null || Password == null){
                 throw new Exception("One or more form data parameters are missing in the HTTP request.");
@@ -100,6 +104,10 @@ public class Admin {
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.APPLICATION_JSON)
     public String UpdateAdmin(@FormDataParam("AdminID") Integer AdminID, @FormDataParam("Username") String Username, @FormDataParam("Password") String Password, @CookieParam("Token") String Token){
+        if (!User.validToken(Token)){
+            return "{\"error\": \"You don't appear to be logged in.\"}";
+
+        }
         try{
             if (AdminID == null || Username == null || Password == null){
                 throw new Exception("One or more form data parameters are missing in the HTTP request.");
@@ -125,6 +133,10 @@ public class Admin {
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.APPLICATION_JSON)
     public String DeleteAdmin(@FormDataParam("AdminID") Integer AdminID, @CookieParam("Token") String Token){
+        if (!User.validToken(Token)){
+            return "{\"error\": \"You don't appear to be logged in.\"}";
+
+        }
         try{
             if(AdminID==null){
                 throw new Exception("One or more form data parameters are missing in the HTTP request.");

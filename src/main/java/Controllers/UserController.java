@@ -79,6 +79,10 @@ public class UserController {
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.APPLICATION_JSON)
     public String InsertIntoUsers(@FormDataParam("UserID") Integer UserID, @FormDataParam("Username") String Username, @FormDataParam("Password") String Password, @FormDataParam("FirstName") String FirstName, @FormDataParam("Surname") String Surname, @CookieParam("Token") String Token){
+        if (!User.validToken(Token)){
+            return "{\"error\": \"You don't appear to be logged in.\"}";
+
+        }
         try{
             if (UserID == null || Username == null || Password == null || FirstName == null || Surname == null){ //If inputs are null, throws exeception.
                 throw new Exception("One or more form data parameters are missing in the HTTP request.");
@@ -107,6 +111,10 @@ public class UserController {
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.APPLICATION_JSON)
     public String UpdateUsers(@FormDataParam("UserID") Integer UserID, @FormDataParam("Username") String Username, @FormDataParam("Password") String Password, @FormDataParam("FirstName") String FirstName, @FormDataParam("Surname") String Surname, @CookieParam("Token") String Token){
+        if (!User.validToken(Token)){
+            return "{\"error\": \"You don't appear to be logged in.\"}";
+
+        }
         try{
             if (UserID == null || Username == null || Password == null || FirstName == null || Surname == null){
                 throw new Exception("One or more form data parameters are missing in the HTTP request.");
@@ -134,6 +142,10 @@ public class UserController {
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.APPLICATION_JSON)
     public String DeleteUsers(@FormDataParam("UserID") Integer UserID, @CookieParam("Token") String Token){
+        if (!User.validToken(Token)){
+            return "{\"error\": \"You don't appear to be logged in.\"}";
+
+        }
         try{
             if(UserID==null){ //If inputted value is empty/incorrect, throw an exception.
                 throw new Exception("One or more form data parameters are missing in the HTTP request.");
