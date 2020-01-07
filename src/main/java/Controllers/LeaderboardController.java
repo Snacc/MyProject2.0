@@ -72,6 +72,10 @@ public class LeaderboardController {
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.APPLICATION_JSON)
     public String InsertIntoLeaderboard(@FormDataParam("LeaderboardID") Integer LeaderboardID, @FormDataParam("Username") String Username, @FormDataParam("Score") String Score, @CookieParam("Token") String Token){
+        if (!User.validToken(Token)){
+            return "{\"error\": \"You don't appear to be logged in.\"}";
+
+        }
         try{
             if (LeaderboardID == null || Username == null){
                 throw new Exception("One or more form data parameters are missing in the HTTP request.");
@@ -98,6 +102,10 @@ public class LeaderboardController {
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.APPLICATION_JSON)
     public String UpdateLeaderboard(@FormDataParam("LeaderboardID") Integer LeaderboardID, @FormDataParam("Username") String Username, @FormDataParam("Score") String Score, @CookieParam("Token") String Token){
+        if (!User.validToken(Token)){
+            return "{\"error\": \"You don't appear to be logged in.\"}";
+
+        }
         try{
             if (LeaderboardID == null || Username == null || Score == null){
                 throw new Exception("One or more form data parameters are missing in the HTTP request.");
@@ -123,6 +131,10 @@ public class LeaderboardController {
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.APPLICATION_JSON)
     public String DeleteLeaderboard(@FormDataParam("LeaderboardID") Integer LeaderboardID, @CookieParam("Token") String Token){
+        if (!User.validToken(Token)){
+            return "{\"error\": \"You don't appear to be logged in.\"}";
+
+        }
         try{
             if(LeaderboardID==null){
                 throw new Exception("One or more form data parameters are missing in the HTTP request.");
