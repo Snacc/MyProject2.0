@@ -16,28 +16,29 @@ public class User {
     @Path("login")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.APPLICATION_JSON)
+    // Takes Username and Password as a login
     public String userLogin(@FormDataParam("Username") String Username, @FormDataParam("Password") String Password){
         try{
-            PreparedStatement ps = Main.db.prepareStatement("SELECT Password FROM Users WHERE Username = ?");
-            ps.setString(1,Username);
-            ResultSet loginResults = ps.executeQuery();
+            PreparedStatement ps = Main.db.prepareStatement("SELECT Password FROM Users WHERE Username = ?"); //checks against database
+            ps.setString(1,Username); //sets parameter as string
+            ResultSet loginResults = ps.executeQuery(); //stores result of SQL query
             if(loginResults.next()){
-                String correctPassword=loginResults.getString(1);//verifies password is correct on db
-                if(Password.equals(correctPassword)){
+                String correctPassword=loginResults.getString(1);//verifies password is correct on from loginResults
+                if(Password.equals(correctPassword)){ //if password is correct
                     String Token = UUID.randomUUID().toString();//token created
                     PreparedStatement ps2 = Main.db.prepareStatement("UPDATE Users SET Token = ? WHERE Username = ?");
-                    ps2.setString(1,Token);
-                    ps2.setString(2,Username);
+                    ps2.setString(1,Token); //sets prepared statement parameter as string Token (above)
+                    ps2.setString(2,Username); //sets prepared statement parameter as inputted Username (so query can locate record)
                     ps2.executeUpdate();
 
                     return "(\"Token\": \"" + Token + "\"}"; //returns generated token
 
 
                 }else{
-                    return "{\"error\": \"Incorrect Password!\"}";
+                    return "{\"error\": \"Incorrect Password!\"}"; //if password is incorrect, error returned
                 }
             }else{
-                return "{\"error\": \"Incorrect Password!\"}";
+                return "{\"error\": \"Incorrect Password!\"}"; //if 
 
             }
         }catch (Exception exception){

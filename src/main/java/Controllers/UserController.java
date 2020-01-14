@@ -25,17 +25,17 @@ public class UserController {
             PreparedStatement ps = Main.db.prepareStatement("SELECT UserID, Username, Password, FirstName, Surname FROM Users");
             ResultSet results = ps.executeQuery();
             while(results.next()){    //Method keeps getting data until it reaches the end of the database.
-                JSONObject item = new JSONObject();
+                JSONObject item = new JSONObject(); //creates json object for items to be stored into
                 item.put("UserID", results.getInt(1));
                 item.put("Username", results.getString(2));
-                item.put("Password", results.getString(3));
+                item.put("Password", results.getString(3));  //each variable stored as json
                 item.put("FirstName", results.getString(4));
                 item.put("Surname", results.getString(5));
                 list.add(item);
             }
             return list.toString();
         }catch (Exception exception){
-            System.out.println("Database error: " + exception.getMessage());
+            System.out.println("Database error: " + exception.getMessage()); //if there is an exception, it will be caught here and printed in console
             return "{\"error\": \"Unable to list items, please see server console for more info.\"}";
         }
     }
@@ -57,12 +57,12 @@ public class UserController {
             ResultSet results = ps.executeQuery();
             if (results.next()){
                 item.put("UserID", UserID);
-                item.put("Username", results.getString(1));
+                item.put("Username", results.getString(1)); //each variable stored as json
                 item.put("Password",results.getString(2));
                 item.put("FirstName", results.getString(3));
                 item.put("Surname", results.getString(4));
             }
-            return item.toString();
+            return item.toString(); //returns json 'item' as a string
 
         }catch (Exception exception){
             System.out.println("Database error: " + exception.getMessage());
@@ -78,7 +78,7 @@ public class UserController {
     @Produces(MediaType.APPLICATION_JSON)
     public String InsertIntoUsers(@FormDataParam("UserID") Integer UserID, @FormDataParam("Username") String Username, @FormDataParam("Password") String Password, @FormDataParam("FirstName") String FirstName, @FormDataParam("Surname") String Surname, @CookieParam("Token") String Token){
         if (!User.validToken(Token)){
-            return "{\"error\": \"You don't appear to be logged in.\"}";
+            return "{\"error\": \"You don't appear to be logged in.\"}"; //if the token is invalid/null then an error is returned
 
         }
         try{
@@ -87,7 +87,7 @@ public class UserController {
             }
             System.out.println("users/newid=" +UserID); // Outputs in console log
             PreparedStatement ps = Main.db.prepareStatement("INSERT INTO Users(UserID, Username, Password, FirstName, Surname) VALUES (?,?,?,?,?)");
-
+            //sets parameter data types
             ps.setInt(1, UserID);
             ps.setString(2, Username);
             ps.setString(3, Password);
@@ -110,17 +110,17 @@ public class UserController {
     @Produces(MediaType.APPLICATION_JSON)
     public String UpdateUsers(@FormDataParam("UserID") Integer UserID, @FormDataParam("Username") String Username, @FormDataParam("Password") String Password, @FormDataParam("FirstName") String FirstName, @FormDataParam("Surname") String Surname, @CookieParam("Token") String Token){
         if (!User.validToken(Token)){
-            return "{\"error\": \"You don't appear to be logged in.\"}";
+            return "{\"error\": \"You don't appear to be logged in.\"}"; //if user token is invalid, error returned
 
         }
         try{
             if (UserID == null || Username == null || Password == null || FirstName == null || Surname == null){
-                throw new Exception("One or more form data parameters are missing in the HTTP request.");
+                throw new Exception("One or more form data parameters are missing in the HTTP request."); //missing parameters
             }
             System.out.println("users/update UserID=" + UserID);
             PreparedStatement ps = Main.db.prepareStatement("UPDATE Users SET Username = ?, Password = ?, Firstname = ?, Surname = ? WHERE UserID = ?");
             ps.setString(1,Username);
-            ps.setString(2,Password);
+            ps.setString(2,Password); //sets parameter data types
             ps.setString(3,FirstName);
             ps.setString(4,Surname);
             ps.setInt(5,UserID);
@@ -140,7 +140,7 @@ public class UserController {
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.APPLICATION_JSON)
     public String DeleteUsers(@FormDataParam("UserID") Integer UserID, @CookieParam("Token") String Token){
-        if (!User.validToken(Token)){
+        if (!User.validToken(Token)){ //if token is invalid, returns error
             return "{\"error\": \"You don't appear to be logged in.\"}";
 
         }
@@ -150,13 +150,13 @@ public class UserController {
             }
             System.out.println("users/delete UserID=" + UserID);
             PreparedStatement ps = Main.db.prepareStatement("DELETE FROM Users WHERE UserID = ?");
-            ps.setInt(1,UserID);
-            ps.execute();
-            return"{\"status\": \"OK\"}";
+            ps.setInt(1,UserID); //sets input data type
+            ps.execute(); //executes prepared statement
+            return"{\"status\": \"OK\"}"; //if successful, returns OK
 
 
         }catch (Exception exception){
-            System.out.println("Database error:" + exception.getMessage());
+            System.out.println("Database error:" + exception.getMessage()); //any error returned
             return "{\"error\": \"Unable to delete item, please see server console for more info.\"}";
         }
     }
