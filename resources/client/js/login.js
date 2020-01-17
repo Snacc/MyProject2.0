@@ -8,8 +8,8 @@ function pageLoad(){
 }
 
 function login(event){
-    event.preventDefault();
-    const form = document.getElementById("loginForm");
+    event.preventDefault(); //event cancellable
+    const form = document.getElementById("loginForm"); //gets loginForm from
     const formData= new FormData(form);
 
     fetch("/user/login", {method: 'post', body:formData}

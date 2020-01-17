@@ -38,7 +38,7 @@ public class User {
                     return "{\"error\": \"Incorrect Password!\"}"; //if password is incorrect, error returned
                 }
             }else{
-                return "{\"error\": \"Incorrect Password!\"}"; //if 
+                return "{\"error\": \"Incorrect Password!\"}"; //if
 
             }
         }catch (Exception exception){
