@@ -2,6 +2,7 @@ package Controllers;
 
 import Server.Main;
 import org.glassfish.jersey.media.multipart.FormDataParam;
+import org.json.simple.JSONObject;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -19,57 +20,62 @@ public class User {
     // Takes Username and Password as a login
     public String userLogin(@FormDataParam("Username") String Username, @FormDataParam("Password") String Password){
         try{
-            PreparedStatement ps = Main.db.prepareStatement("SELECT Password FROM Users WHERE Username = ?"); //checks against database
-            ps.setString(1,Username); //sets parameter as string
-            ResultSet loginResults = ps.executeQuery(); //stores result of SQL query
-            if(loginResults.next()){
-                String correctPassword=loginResults.getString(1);//verifies password is correct on from loginResults
-                if(Password.equals(correctPassword)){ //if password is correct
-                    String Token = UUID.randomUUID().toString();//token created
+            System.out.println("user/login");
+            PreparedStatement ps1= Main.db.prepareStatement("SELECT Password FROM Users WHERE Username = ?");
+            ps1.setString(1, Username);
+            ResultSet loginResults = ps1.executeQuery();
+            if (loginResults.next()){
+                String correctPassword = loginResults.getString(1);
+                if (Password.equals(correctPassword)){
+                    String Token = UUID.randomUUID().toString();
                     PreparedStatement ps2 = Main.db.prepareStatement("UPDATE Users SET Token = ? WHERE Username = ?");
-                    ps2.setString(1,Token); //sets prepared statement parameter as string Token (above)
-                    ps2.setString(2,Username); //sets prepared statement parameter as inputted Username (so query can locate record)
+                    ps2.setString(1,Token);
+                    ps2.setString(2,Username);
                     ps2.executeUpdate();
 
-                    return "(\"Token\": \"" + Token + "\"}"; //returns generated token
+                    JSONObject userDetails = new JSONObject();
+                    userDetails.put("Username", Username);
+                    userDetails.put("Token", Token);
+                    return userDetails.toString();
 
 
-                }else{
-                    return "{\"error\": \"Incorrect Password!\"}"; //if password is incorrect, error returned
+                } else{
+                    return "{\"error\": Incorrect Password!\"}";
                 }
-            }else{
-                return "{\"error\": \"Incorrect Password!\"}"; //if
 
+            }else {
+                return "{\"error\": \"Unknown User!\"}";
             }
-        }catch (Exception exception){
-            System.out.println("Database error during /user/login: " + exception.getMessage());
+        } catch (Exception exception){
+            System.out.println("Database error during /user/login: " +exception.getMessage());
             return "{\"error\": \"Server side error!\"}";
         }
     }
+
 
     @POST
     @Path("logout")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.APPLICATION_JSON)
-    public String userLogout(@CookieParam("Token") String Token){//takes corresponding user's token
-        try{
-            System.out.println("/users/logout");
-            PreparedStatement ps = Main.db.prepareStatement("SELECT UserID FROM Users WHERE Token = ?");
-            ps.setString(1,Token);
-            ResultSet logoutResults = ps.executeQuery();
-            if (logoutResults.next()){
-                int ID = logoutResults.getInt(1);
+    public String userLogout(@CookieParam("Token") String Token) {//takes corresponding user's token
+        try {
+            System.out.println("user/logout");
+            PreparedStatement ps1 = Main.db.prepareStatement("SELECT UserID FROM Users WHERE Token = ?");
+            ps1.setString(1, Token);
+            ResultSet logoutResults = ps1.executeQuery();
+            if (logoutResults.next()) {
+                int id = logoutResults.getInt(1);
                 PreparedStatement ps2 = Main.db.prepareStatement("UPDATE Users SET Token = NULL WHERE UserID = ?");
-                ps2.setInt(1,ID);
+                ps2.setInt(1, id);
                 ps2.executeUpdate();
-                return "{\"status\": \"OK\"}";
-            } else{
-                return "{\"error\": \"Invalid token\")";
 
+                return "{\"status\": \"OK\"}";
+            } else {
+                return "{\"error\": \"Invalid token!\"}";
             }
-        } catch (Exception exception){
-            System.out.println("Database error during /users/logout - could not update" + exception.getMessage());//prints error in console
-            return "{\"error\": \"Server side error :(\"}";
+        } catch (Exception exception) {
+            System.out.println("Database error during /user/logout: " + exception.getMessage());
+            return "{\"error\": \"Server side error!\"}";
         }
     }
 

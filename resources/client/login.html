@@ -1,30 +1,32 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <title>Test Login Page</title>
-    <link rel="stylesheet" type ="text/css" href="/client/css/styles.css">
-    <script src="/client/js/js.cookie.js"></script>
-    <script src="/client/js/login.js"></script>
+<html>
+    <head>
+        <title>Login Page</title>
+        <link rel="stylesheet" type = "text/css" href = "/client/css/styles.css" style=>
+        <script src = "/client/js/js.cookie.js"></script>
+        <script src = "/client/js/login.js"></script>
+    </head>
+    <body onload = "pageLoad()">
+        <div id ="content" style="text-align:center;">
+            <h1>Login:</h1>
+            <hr />
+            <form id="loginForm">
+                <div class="loginDiv">
+                    <label for="Username">Username:</label>
+                    <input type="text" name="Username" id="Username">
 
-</head>
-<body onload="pageLoad()">
-<div id="content">
-    <h1>Login:</h1>
-    <hr />
-    <form id="loginForm">
-        <div class="loginDiv">
-            <label for="username">Username:</label>
-            <input type="text" name="username" id="username">
-        </div>
-        <div class="loginDiv">
-            <label for="password">Password:</label>
-            <input type="password" name="password" id="password">
-        </div>
-        <div class="loginDiv">
-            <input type="submit" value="Login" id="loginButton">
-        </div>
-    </form>
-</div>
+                </div>
+                <div class="loginDiv">
+                    <label for="Password">Password:</label>
+                    <input type="Password" name="Password" id="Password">
+                </div>
+                <div class="loginDiv">
+                    <input type="submit" value="Login" id="loginButton">
+                </div>
+            </form>
+            <form id = "logout">
 
-</body>
+            </form>
+        </div>
+    </body>
 </html>

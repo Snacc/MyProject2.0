@@ -1,49 +1,44 @@
 function pageLoad() {
-
-    let now = new Date();
-
     let myHTML = '<div style="text-align:center;">'
-        + '<h1>Qwizzy Pizzy</h1>'
-        + '<img src="/client/img/logo.png"  alt="Logo"/>'
-        + '<div style="font-style: italic;">'
-        + 'Generated at ' + now.toLocaleTimeString()
-        + '</div>'
-        + '</div>';
+        + '<h1>Quizzingo</h1>'
+        + '<a href="register.html"><button class="loginButton" id ="loginButton" style="margin:5px;">Register</button></a>'
+        + '<a href="login.html"><button class="loginButton" id="loginButton" style="margin:5px;">Login</button></a>'
 
-    document.getElementById("testDiv").innerHTML = myHTML;
+    document.getElementById("menuButtons").innerHTML = myHTML;
+    checkLogin()
+
 
 }
 
 function checkLogin(){
-    let username = Cookies.get("username");
+    let username = Cookies.get("Username");
 
     let logInHTML = '';
 
     if(username === undefined){
-        let editButtons= document.getElementByClassName("editButton");
-        for(let button of editButtons){
+
+        let loginButtons=document.getElementsByClassName("loginButton");
+        for(let button of loginButtons){
+            button.style.visibility = "visible";
+        }
+
+        let logoutButtons=document.getElementsByClassName("logoutButton");
+        for(let button of logoutButtons){
             button.style.visibility = "hidden";
         }
 
-        let deleteButtons=document.getElementsByClassName("deletebutton");
-        for(let button of deleteButtons){
-            button.style.visibility ="hidden";
-        }
 
-        logInHTML= "Not logged in. <a href='/client/login.html'>Log in</a>";
     } else{
-        let editButtons= document.getElementsByClassName("editbutton");
-        for(let button of editButtons){
-            button.style.visibility="visible";
-        }
 
-        let deleteButtons = document.getElementsByClassName("deleteButton");
-        for(let button of deleteButtons){
-            button.style.visibility = "visible";
+        let loginButtons = document.getElementsByClassName("loginButton");
+        for(let button of loginButtons){
+            button.style.visibility= "hidden";
 
         }
 
-        logInHTML="Logged in as " + username + ".<a href='client/login.html?logout;>Log out</a>"
+
+
+        logInHTML="Logged in as " + username + ". <a href='login.html?logout'>Logout</a>"
     }
 
     document.getElementById("loggedInDetails").innerHTML = logInHTML;

@@ -1,7 +1,8 @@
 body {
-    background-color: cornflowerblue;
+    background-color: mediumpurple;
     margin: 0;
-    font-family: 'Arial', serif;
+    font-family: 'Agency FB', serif;
+    font-size: 30px
 }
 
 h1 {
@@ -9,11 +10,12 @@ h1 {
 }
 
 #content {
-    background-color: lightgrey;
-    width: 1000px;
+    background-color: white;
+    width: 750px;
     margin: 0 auto;
-    min-height: 1000px;
+    min-height: 825px;
     padding: 32px;
+    text-align: center;
 }
 
 .loginDiv{
@@ -29,37 +31,37 @@ h1 {
 
 #loginButton{
     width:200px;
-    background-color: cornflowerblue;
-}
-
-#loginButton:hover{
-    background-color:dodgerblue;
-}
-
-.editButton, .deleteButton, #saveButton, #cancelButton, #loginButton {
+    background-color: mediumpurple;
     color: black;
     font-size: 14px;
     border: none;
     padding: 8px;
     border-radius: 8px;
-
 }
 
-.deleteButton, #cancelButton{
-    visibility: hidden;
-    background-color: indianred;
-    margin-left: 10px;
+#loginButton:hover{
+    background-color:rebeccapurple;
 }
 
-.editButton{
-    visibility: hidden;
-    background-color: silver;
-
-}
-
-#loggedInDetails{
+.loggedInDetails{
     margin: 0;
-    text-align: right;
+    text-align: center;
     display: inline;
-    float: right
+    float: right;
 }
+
+#scoreboardButton{
+    width:200px;
+    background-color: mediumpurple;
+    color: black;
+    font-size: 14px;
+    border: none;
+    padding: 8px;
+    border-radius: 8px;
+    text-align: center;
+}
+
+#scoreboardButton:hover{
+    background-color:rebeccapurple;
+}
+

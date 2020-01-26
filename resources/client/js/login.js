@@ -1,40 +1,48 @@
 function pageLoad(){
     if(window.location.search === '?logout'){
-        document.getElementbyId('content').innerHTML = '<h1>Logging out, please wait...</h1>';
+        document.getElementById('content').innerHTML = '<h1>Logging out, please wait...</h1>';
         logout();
+
     } else{
-        document.getElementById("loginButton").addEventListener("click", login);
+        document.getElementById('loginButton').addEventListener("click", login);
     }
 }
 
 function login(event){
-    event.preventDefault(); //event cancellable
-    const form = document.getElementById("loginForm"); //gets loginForm from
-    const formData= new FormData(form);
+    event.preventDefault();
 
-    fetch("/user/login", {method: 'post', body:formData}
+
+    const form = document.getElementById("loginForm");
+    const formData = new FormData(form);
+
+    fetch("/user/login", {method: 'post', body: formData}
     ).then(response => response.json()
     ).then(responseData => {
+
         if(responseData.hasOwnProperty('error')){
             alert(responseData.error);
-        } else{
-            Cookies.set("username", responseData.username);
-            Cookies.set("token", responseData.token);
+
+        } else {
+            Cookies.set("Username", responseData.Username);
+            Cookies.set("Token", responseData.Token);
 
             window.location.href = '/client/index.html';
         }
+
     });
+
 }
 
 function logout(){
+
     fetch("/user/logout", {method:'post'}
     ).then(response=> response.json()
     ).then(responseData => {
         if(responseData.hasOwnProperty('error')){
             alert(responseData.error);
         } else{
-            Cookies.remove("username");
-            Cookies.remove("token");
+            Cookies.remove("Username");
+            Cookies.remove("Token");
 
             window.location.href='/client/index.html';
         }
