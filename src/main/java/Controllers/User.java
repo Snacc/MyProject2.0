@@ -92,6 +92,31 @@ public class User {
         }
     }
 
+    @POST
+    @Path("register")
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    @Produces(MediaType.APPLICATION_JSON)
+    public String InsertIntoUsers(@FormDataParam("Username") String Username, @FormDataParam("Password") String Password, @FormDataParam("FirstName") String FirstName, @FormDataParam("Surname") String Surname){
+        try{
+            if (Username == null || Password == null || FirstName == null || Surname == null){ //If inputs are null, throws exeception.
+                throw new Exception("One or more form data parameters are missing in the HTTP request.");
+            }
+            PreparedStatement ps = Main.db.prepareStatement("INSERT INTO Users(Username, Password, FirstName, Surname) VALUES (?,?,?,?)");
+            //sets parameter data types
+
+            ps.setString(1, Username);
+            ps.setString(2, Password);
+            ps.setString(3, FirstName);
+            ps.setString(4, Surname);
+            ps.execute();
+            return "{\"status\": \"OK\"}"; //returns a status token if it has been executed successfully.
+
+        }catch (Exception exception){
+            System.out.println("Database error: " + exception.getMessage());
+            return "{\"error\": \"Unable to create new item, please see server console for more info.\"}";
+        }
+    }
+
 
 
 

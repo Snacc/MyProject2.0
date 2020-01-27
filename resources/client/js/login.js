@@ -11,7 +11,6 @@ function pageLoad(){
 function login(event){
     event.preventDefault();
 
-
     const form = document.getElementById("loginForm");
     const formData = new FormData(form);
 
