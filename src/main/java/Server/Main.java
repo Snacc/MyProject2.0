@@ -26,16 +26,6 @@ public class Main {
         }
     }
 
-    //Once the database has been opened and its purpose fulfilled, the database must be closed, this method closes it.
-    private static void closeDatabase(){
-        try{
-            db.close();
-            System.out.println("Disconnected from database.");
-        } catch (Exception exception){
-            System.out.println("Database disconnection error:" + exception.getMessage());
-        }
-    }
-
     //Main all main code goes here
     public static void main(String[] args) {
         openDatabase();
