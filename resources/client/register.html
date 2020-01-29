@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Registration Page</title>
+    <link rel="stylesheet" type = "text/css" href = "/client/css/styles.css" style=>
+    <script src = "/client/js/js.cookie.js"></script>
+    <script src = "/client/js/register.js"></script>
+</head>
+<body onload = "pageLoad()">
+<div id ="content" style="text-align:center;">
+    <h1>Register:</h1>
+    <hr />
+    <form id="registerForm">
+        <div class="registerDiv" style="margin-right:3px;">
+            <label for="Username">Username:</label>
+            <input type="text" name="Username" id="Username">
+
+        </div>
+        <div class="registerDiv">
+            <label for="Password">Password:</label>
+            <input type="Password" name="Password" id="Password">
+        </div>
+
+        <div class="registerDiv" style="margin-right:10px;">
+            <label for = "FirstName">First Name:</label>
+            <input type = "FirstName" name ="FirstName" id="FirstName">
+        </div>
+
+        <div class="registerDiv" style="margin-left:7px;">
+            <label for = "Surname">Surname:</label>
+            <input type = "Surname" name ="Surname" id="Surname">
+        </div>
+
+        <div class="registerDiv">
+            <input type="submit" value="Register" id="registerButton">
+        </div>
+    </form>
+
+    <div id = "menu">
+        <a href="index.html"><button class ="menuButton" id="menuButton">Main Menu</button></a>
+    </div>
+</div>
+</body>
+</html>
