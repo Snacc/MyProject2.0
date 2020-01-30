@@ -11,7 +11,7 @@ import javax.ws.rs.core.MediaType;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
-@Path("leaderboard")
+@Path("leaderboard/")
 public class LeaderboardController {
 
     //This method lists all scoreboard records
