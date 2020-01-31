@@ -18,6 +18,16 @@ h1 {
     text-align: center;
 }
 
+#content2 {
+    background-color: white;
+    width: 750px;
+    margin: 0 auto;
+    min-height: 100px;
+    padding: 32px;
+    text-align: center;
+}
+
+
 .loginDiv{
     font-size: 14pt;
     margin-top: 40px;
@@ -88,10 +98,41 @@ h1 {
     border: none;
     padding: 8px;
     border-radius: 8px;
+    text-align:center;
 
 }
 
 #menuButton:hover{
     background-color: rebeccapurple;
+}
+
+#scoreboardMenuButton{
+    width:200px;
+    background-color: white;
+    color: black;
+    font-size: 14px;
+    border: none;
+    padding: 8px;
+    border-radius: 8px;
+    text-align:center;
+
+}
+
+#scoreboardMenuButton:hover{
+    background-color:lightgrey;
+}
+
+#quizButton{
+    width:200px;
+    background-color: mediumpurple;
+    color: black;
+    font-size: 14px;
+    border: none;
+    padding: 8px;
+    border-radius: 8px;
+}
+
+#quizButton:hover{
+    background-color:rebeccapurple;
 }
 
